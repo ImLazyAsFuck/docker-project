@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <menuitem id="menu_pet_root"
+              name="Pet Hospital"
+              sequence="10"/>
+
+    <menuitem id="menu_pet_pet"
+              name="Thú cưng"
+              parent="menu_pet_root"
+              action="action_pet_pet"
+              sequence="10"/>
+
+    <menuitem id="menu_pet_type"
+              name="Loại và Giống"
+              parent="menu_pet_root"
+              action="action_pet_type"
+              sequence="20"/>
+
+</odoo>

@@ -1,0 +1,33 @@
+# -*- coding: utf-8 -*-
+{
+    'name': 'Pet Hospital Management',
+    'summary': 'Manage pets, owners, and veterinary services',
+    'description': """
+Pet Hospital Management System
+- Manage pets and owners
+- Veterinary appointments
+- Medical records
+- Billing and invoices
+    """,
+    'author': 'Your Name',
+    'website': 'https://yourwebsite.com',
+    'category': 'Services',
+    'version': '17.0.1.0',
+
+    'depends': [
+        'base',
+    ],
+
+    'data': [
+        'security/ir.model.access.csv',
+        'views/pet_views.xml',
+        'views/pet_type_views.xml',
+        'views/res_partner_views.xml',
+        'views/product_views.xml',
+        'views/menus.xml',
+    ],
+
+    'application': True,
+    'installable': True,
+    'license': 'LGPL-3',
+}
