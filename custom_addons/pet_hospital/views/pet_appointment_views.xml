@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="pet_appointment_tree_view" model="ir.ui.view">
+        <field name="name">pet.appointment.tree</field>
+        <field name="model">pet.appointment</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="appointment_date"/>
+                <field name="pet_id"/>
+                <field name="owner_id"/>
+                <field name="doctor_id"/>
+                <field name="reason"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="pet_appointment_form_view" model="ir.ui.view">
+        <field name="name">pet.appointment.form</field>
+        <field name="model">pet.appointment</field>
+        <field name="arch" type="xml">
+            <form string="Pet Appointment">
+                <sheet>
+                    <group>
+                        <field name="pet_id"/>
+                        <field name="owner_id" readonly="1"/>
+                        <field name="doctor_id"/>
+                        <field name="state"/>
+                    </group>
+                    <group>
+                        <field name="appointment_date"/>
+                        <field name="reason"/>
+                    </group>
+                    <group>
+                        <field name="notes"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="pet_appointment_calendar_view" model="ir.ui.view">
+        <field name="name">pet.appointment.calendar</field>
+        <field name="model">pet.appointment</field>
+        <field name="arch" type="xml">
+            <calendar string="Lịch hẹn thú cưng"
+                      date_start="appointment_date"
+                      color="doctor_id">
+                <field name="pet_id"/>
+                <field name="owner_id"/>
+                <field name="doctor_id"/>
+                <field name="reason"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="pet_appointment_search_view" model="ir.ui.view">
+        <field name="name">pet.appointment.search</field>
+        <field name="model">pet.appointment</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="pet_id"/>
+                <field name="owner_id"/>
+                <field name="doctor_id"/>
+                <field name="state"/>
+                <filter string="Trong ngày" name="today"
+                        domain="[('appointment_date','&gt;=',context_today()),('appointment_date','&lt;', (context_today() + ' 23:59:59'))]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_pet_appointment" model="ir.actions.act_window">
+        <field name="name">Lịch hẹn thú cưng</field>
+        <field name="res_model">pet.appointment</field>
+        <field name="view_mode">calendar,tree,form</field>
+        <field name="search_view_id" ref="pet_appointment_search_view"/>
+    </record>
+
+</odoo>

@@ -16,6 +16,7 @@ Pet Hospital Management System
 
     'depends': [
         'base',
+        'product',
     ],
 
     'data': [
@@ -24,6 +25,7 @@ Pet Hospital Management System
         'views/pet_type_views.xml',
         'views/res_partner_views.xml',
         'views/product_views.xml',
+        'views/pet_appointment_views.xml',
         'views/menus.xml',
     ],
 

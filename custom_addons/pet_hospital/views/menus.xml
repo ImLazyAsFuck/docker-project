@@ -17,4 +17,10 @@
               action="action_pet_type"
               sequence="20"/>
 
+    <menuitem id="menu_pet_appointment"
+              name="Lịch hẹn khám"
+              parent="menu_pet_root"
+              action="action_pet_appointment"
+              sequence="30"/>
+
 </odoo>

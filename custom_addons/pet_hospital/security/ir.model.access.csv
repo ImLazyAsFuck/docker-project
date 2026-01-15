@@ -1,2 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_pet_hospital_pet_hospital,pet_hospital.pet_hospital,model_pet_hospital_pet_hospital,base.group_user,1,1,1,1
+access_pet_pet,pet.pet,model_pet_pet,base.group_user,1,1,1,1
+access_pet_vaccination,pet.vaccination,model_pet_vaccination,base.group_user,1,1,1,1
+access_pet_medical_history,pet.medical.history,model_pet_medical_history,base.group_user,1,1,1,1
+access_pet_appointment,pet.appointment,model_pet_appointment,base.group_user,1,1,1,1
