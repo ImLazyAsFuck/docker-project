@@ -26,6 +26,7 @@ Pet Hospital Management System
         'views/res_partner_views.xml',
         'views/product_views.xml',
         'views/pet_appointment_views.xml',
+        'views/pet_booking_views.xml',
         'views/menus.xml',
     ],
 

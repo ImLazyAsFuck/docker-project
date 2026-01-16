@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="pet_booking_tree_view" model="ir.ui.view">
+        <field name="name">pet.booking.tree</field>
+        <field name="model">pet.booking</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="booking_date"/>
+                <field name="partner_id"/>
+                <field name="pet_id"/>
+                <field name="amount_total" sum="Total"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="pet_booking_form_view" model="ir.ui.view">
+        <field name="name">pet.booking.form</field>
+        <field name="model">pet.booking</field>
+        <field name="arch" type="xml">
+            <form string="Pet Booking">
+                <header>
+                    <button name="action_confirm" string="Confirm" type="object"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_done" string="Done" type="object"
+                            invisible="state != 'confirmed'"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            invisible="state in ['done', 'cancelled']"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Cancelled" bg_color="bg-danger" invisible="state != 'cancelled'"/>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="booking_date"/>
+                        </group>
+                        <group>
+                            <field name="partner_id" options="{'no_create': False}"/>
+                            <field name="pet_id" options="{'no_create': False}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Services">
+                            <field name="line_ids" widget="section_and_note_one2many" nolabel="1">
+                                <tree editable="bottom" string="Booking Lines">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="product_id"/>
+                                    <field name="product_uom_qty"/>
+                                    <field name="price_unit"/>
+                                    <field name="price_subtotal" sum="Total"/>
+                                </tree>
+                                <form>
+                                    <sheet>
+                                        <group>
+                                            <group>
+                                                <field name="product_id"/>
+                                                <field name="product_uom_qty"/>
+                                            </group>
+                                            <group>
+                                                <field name="price_unit"/>
+                                                <field name="price_subtotal" readonly="1"/>
+                                            </group>
+                                        </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes" placeholder="Additional notes..."/>
+                        </page>
+                    </notebook>
+                    <group class="oe_subtotal_footer">
+                        <field name="amount_total" widget="monetary" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="pet_booking_search_view" model="ir.ui.view">
+        <field name="name">pet.booking.search</field>
+        <field name="model">pet.booking</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="pet_id"/>
+                <field name="booking_date"/>
+                <filter string="Today" name="today" domain="[('booking_date', '=', context_today())]"/>
+                <filter string="This Month" name="this_month" domain="[('booking_date', '>=', (context_today() + relativedelta(day=1)).strftime('%Y-%m-%d'))]"/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                <filter string="Done" name="done" domain="[('state', '=', 'done')]"/>
+                <separator/>
+                <filter string="Group by Customer" name="group_by_partner" context="{'group_by': 'partner_id'}"/>
+                <filter string="Group by Pet" name="group_by_pet" context="{'group_by': 'pet_id'}"/>
+                <filter string="Group by Date" name="group_by_date" context="{'group_by': 'booking_date'}"/>
+                <filter string="Group by Status" name="group_by_state" context="{'group_by': 'state'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_pet_booking" model="ir.actions.act_window">
+        <field name="name">Phiếu dịch vụ</field>
+        <field name="res_model">pet.booking</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="pet_booking_search_view"/>
+        <field name="context">{'default_booking_date': context_today(), 'search_default_today': 1}</field>
+    </record>
+
+</odoo>
