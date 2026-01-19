@@ -20,37 +20,40 @@
         <field name="name">pet.booking.form</field>
         <field name="model">pet.booking</field>
         <field name="arch" type="xml">
-            <form string="Pet Booking">
+            <form string="Phiếu dịch vụ">
                 <header>
-                    <button name="action_confirm" string="Confirm" type="object"
+                    <button name="action_confirm" string="Xác nhận" type="object"
                             class="oe_highlight" invisible="state != 'draft'"/>
-                    <button name="action_done" string="Done" type="object"
+                    <button name="action_in_progress" string="Đang làm" type="object"
                             invisible="state != 'confirmed'"/>
-                    <button name="action_cancel" string="Cancel" type="object"
-                            invisible="state in ['done', 'cancelled']"/>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
+                    <button name="action_done" string="Hoàn thành" type="object"
+                            invisible="state not in ['confirmed', 'in_progress']"/>
+                    <button name="action_cancel" string="Hủy" type="object"
+                            invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,in_progress,done"/>
                 </header>
                 <sheet>
-                    <widget name="web_ribbon" title="Cancelled" bg_color="bg-danger" invisible="state != 'cancelled'"/>
+                    <widget name="web_ribbon" title="Đã hủy" bg_color="bg-danger" invisible="state != 'cancelled'"/>
                     <group>
                         <group>
-                            <field name="name"/>
-                            <field name="booking_date"/>
+                            <field name="name" readonly="state == 'done'"/>
+                            <field name="booking_date" readonly="state == 'done'"/>
                         </group>
                         <group>
-                            <field name="partner_id" options="{'no_create': False}"/>
-                            <field name="pet_id" options="{'no_create': False}"/>
+                            <field name="partner_id" options="{'no_create': False}" readonly="state == 'done'"/>
+                            <field name="pet_id" options="{'no_create': False}" readonly="state == 'done'"/>
+                            <field name="doctor_id" options="{'no_create': False}" readonly="state == 'done'"/>
                         </group>
                     </group>
                     <notebook>
-                        <page string="Services">
-                            <field name="line_ids" widget="section_and_note_one2many" nolabel="1">
-                                <tree editable="bottom" string="Booking Lines">
+                        <page string="Dịch vụ">
+                            <field name="line_ids" widget="section_and_note_one2many" nolabel="1" readonly="state == 'done'">
+                                <tree editable="bottom" string="Chi tiết dịch vụ">
                                     <field name="sequence" widget="handle"/>
                                     <field name="product_id"/>
                                     <field name="product_uom_qty"/>
                                     <field name="price_unit"/>
-                                    <field name="price_subtotal" sum="Total"/>
+                                    <field name="price_subtotal" sum="Tổng"/>
                                 </tree>
                                 <form>
                                     <sheet>
@@ -68,14 +71,15 @@
                                 </form>
                             </field>
                         </page>
-                        <page string="Notes">
-                            <field name="notes" placeholder="Additional notes..."/>
+                        <page string="Ghi chú">
+                            <field name="notes" placeholder="Ghi chú bổ sung..." readonly="state == 'done'"/>
                         </page>
                     </notebook>
                     <group class="oe_subtotal_footer">
                         <field name="amount_total" widget="monetary" nolabel="1"/>
                     </group>
                 </sheet>
+                <chatter/>
             </form>
         </field>
     </record>
@@ -89,24 +93,86 @@
                 <field name="partner_id"/>
                 <field name="pet_id"/>
                 <field name="booking_date"/>
-                <filter string="Today" name="today" domain="[('booking_date', '=', context_today())]"/>
-                <filter string="This Month" name="this_month" domain="[('booking_date', '>=', (context_today() + relativedelta(day=1)).strftime('%Y-%m-%d'))]"/>
-                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
-                <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
-                <filter string="Done" name="done" domain="[('state', '=', 'done')]"/>
+                <field name="doctor_id"/>
+                <filter string="Phiếu hôm nay" name="today" domain="[('booking_date', '=', context_today())]"/>
+                <filter string="Tháng này" name="this_month" domain="[('booking_date', '>=', (context_today() + relativedelta(day=1)).strftime('%Y-%m-%d'))]"/>
+                <filter string="Chưa thanh toán" name="unpaid" domain="[('state', 'in', ['draft', 'confirmed', 'in_progress'])]"/>
+                <filter string="Mới" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Đã xác nhận" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                <filter string="Đang làm" name="in_progress" domain="[('state', '=', 'in_progress')]"/>
+                <filter string="Hoàn thành" name="done" domain="[('state', '=', 'done')]"/>
+                <filter string="Đã hủy" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
                 <separator/>
-                <filter string="Group by Customer" name="group_by_partner" context="{'group_by': 'partner_id'}"/>
-                <filter string="Group by Pet" name="group_by_pet" context="{'group_by': 'pet_id'}"/>
-                <filter string="Group by Date" name="group_by_date" context="{'group_by': 'booking_date'}"/>
-                <filter string="Group by Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                <filter string="Nhóm theo Khách hàng" name="group_by_partner" context="{'group_by': 'partner_id'}"/>
+                <filter string="Nhóm theo Thú cưng" name="group_by_pet" context="{'group_by': 'pet_id'}"/>
+                <filter string="Nhóm theo Ngày" name="group_by_date" context="{'group_by': 'booking_date'}"/>
+                <filter string="Nhóm theo Trạng thái" name="group_by_state" context="{'group_by': 'state'}"/>
+                <filter string="Nhóm theo Bác sĩ" name="group_by_doctor" context="{'group_by': 'doctor_id'}"/>
+                <filter string="Nhóm theo Loại thú cưng" name="group_by_pet_type" context="{'group_by': 'pet_type_id'}"/>
             </search>
         </field>
+    </record>
+
+    <record id="pet_booking_line_pivot_view" model="ir.ui.view">
+        <field name="name">pet.booking.line.pivot</field>
+        <field name="model">pet.booking.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Báo cáo Doanh thu theo Dịch vụ">
+                <field name="booking_date" type="row" interval="month" string="Tháng"/>
+                <field name="doctor_id" type="row" string="Bác sĩ"/>
+                <field name="product_id" type="col" string="Loại dịch vụ"/>
+                <field name="price_subtotal" type="measure" string="Doanh thu"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="pet_booking_pivot_view" model="ir.ui.view">
+        <field name="name">pet.booking.pivot</field>
+        <field name="model">pet.booking</field>
+        <field name="arch" type="xml">
+            <pivot string="Báo cáo Doanh thu">
+                <field name="booking_date" type="row" interval="month" string="Tháng"/>
+                <field name="doctor_id" type="row" string="Bác sĩ"/>
+                <field name="pet_type_id" type="col" string="Loại thú cưng"/>
+                <field name="amount_total" type="measure" string="Doanh thu"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="pet_booking_graph_bar_view" model="ir.ui.view">
+        <field name="name">pet.booking.graph.bar</field>
+        <field name="model">pet.booking</field>
+        <field name="arch" type="xml">
+            <graph string="Doanh thu theo Loại thú cưng" type="bar">
+                <field name="pet_type_id" type="row"/>
+                <field name="amount_total" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="pet_booking_line_graph_pie_view" model="ir.ui.view">
+        <field name="name">pet.booking.line.graph.pie</field>
+        <field name="model">pet.booking.line</field>
+        <field name="arch" type="xml">
+            <graph string="Tỉ trọng Dịch vụ" type="pie">
+                <field name="product_id" type="row"/>
+                <field name="product_uom_qty" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_pet_booking_line_pie" model="ir.actions.act_window">
+        <field name="name">Tỉ trọng Dịch vụ</field>
+        <field name="res_model">pet.booking.line</field>
+        <field name="view_mode">graph</field>
+        <field name="view_id" ref="pet_booking_line_graph_pie_view"/>
+        <field name="domain">[('booking_id.state', '=', 'done')]</field>
     </record>
 
     <record id="action_pet_booking" model="ir.actions.act_window">
         <field name="name">Phiếu dịch vụ</field>
         <field name="res_model">pet.booking</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree,form,pivot,graph</field>
         <field name="search_view_id" ref="pet_booking_search_view"/>
         <field name="context">{'default_booking_date': context_today(), 'search_default_today': 1}</field>
     </record>

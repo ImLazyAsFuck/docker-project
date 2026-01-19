@@ -17,9 +17,11 @@ Pet Hospital Management System
     'depends': [
         'base',
         'product',
+        'mail',
     ],
 
     'data': [
+        'security/pet_security.xml',
         'security/ir.model.access.csv',
         'views/pet_views.xml',
         'views/pet_type_views.xml',
@@ -30,7 +32,11 @@ Pet Hospital Management System
         'views/menus.xml',
     ],
 
+    'demo': [
+    ],
+
     'application': True,
     'installable': True,
     'license': 'LGPL-3',
+    'post_init_hook': 'post_init_hook',
 }

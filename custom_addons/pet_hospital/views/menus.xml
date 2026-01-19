@@ -8,25 +8,50 @@
     <menuitem id="menu_pet_pet"
               name="Thú cưng"
               parent="menu_pet_root"
+              sequence="10"/>
+
+    <menuitem id="menu_pet_pet_list"
+              name="Danh sách thú cưng"
+              parent="menu_pet_pet"
               action="action_pet_pet"
               sequence="10"/>
 
     <menuitem id="menu_pet_type"
               name="Loại và Giống"
-              parent="menu_pet_root"
+              parent="menu_pet_pet"
               action="action_pet_type"
               sequence="20"/>
 
     <menuitem id="menu_pet_appointment"
-              name="Lịch hẹn khám"
+              name="Đặt lịch"
               parent="menu_pet_root"
+              sequence="20"/>
+
+    <menuitem id="menu_pet_appointment_list"
+              name="Lịch hẹn khám"
+              parent="menu_pet_appointment"
               action="action_pet_appointment"
+              sequence="10"/>
+
+    <menuitem id="menu_pet_service"
+              name="Dịch vụ"
+              parent="menu_pet_root"
               sequence="30"/>
 
     <menuitem id="menu_pet_booking"
               name="Phiếu dịch vụ"
-              parent="menu_pet_root"
+              parent="menu_pet_service"
               action="action_pet_booking"
+              sequence="10"/>
+
+    <menuitem id="menu_pet_report"
+              name="Báo cáo"
+              parent="menu_pet_root"
               sequence="40"/>
+
+    <menuitem id="menu_pet_config"
+              name="Cấu hình"
+              parent="menu_pet_root"
+              sequence="50"/>
 
 </odoo>
