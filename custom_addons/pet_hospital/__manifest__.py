@@ -32,6 +32,7 @@ Pet Hospital Management System
     ],
 
     'demo': [
+        'demo/demo.xml',
     ],
 
     'application': True,

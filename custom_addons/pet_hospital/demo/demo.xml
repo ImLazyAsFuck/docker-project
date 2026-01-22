@@ -1,30 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
-<!--
-          <record id="object0" model="pet_hospital.pet_hospital">
-            <field name="name">Object 0</field>
-            <field name="value">0</field>
-          </record>
-
-          <record id="object1" model="pet_hospital.pet_hospital">
-            <field name="name">Object 1</field>
-            <field name="value">10</field>
-          </record>
-
-          <record id="object2" model="pet_hospital.pet_hospital">
-            <field name="name">Object 2</field>
-            <field name="value">20</field>
-          </record>
-
-          <record id="object3" model="pet_hospital.pet_hospital">
-            <field name="name">Object 3</field>
-            <field name="value">30</field>
-          </record>
-
-          <record id="object4" model="pet_hospital.pet_hospital">
-            <field name="name">Object 4</field>
-            <field name="value">40</field>
-          </record>
--->
+    <data noupdate="0">
+        
+        <record id="pet_type_dog" model="pet.type">
+            <field name="name">Dog</field>
+        </record>
+        
+        <record id="pet_type_cat" model="pet.type">
+            <field name="name">Cat</field>
+        </record>
+        
+        <record id="pet_type_bird" model="pet.type">
+            <field name="name">Bird</field>
+        </record>
+        
+        <record id="pet_breed_golden_retriever" model="pet.breed">
+            <field name="name">Golden Retriever</field>
+            <field name="type_id" ref="pet_type_dog"/>
+        </record>
+        
+        <record id="pet_breed_poodle" model="pet.breed">
+            <field name="name">Poodle</field>
+            <field name="type_id" ref="pet_type_dog"/>
+        </record>
+        
+        <record id="pet_breed_persian" model="pet.breed">
+            <field name="name">Persian</field>
+            <field name="type_id" ref="pet_type_cat"/>
+        </record>
+        
+        <record id="pet_breed_siamese" model="pet.breed">
+            <field name="name">Siamese</field>
+            <field name="type_id" ref="pet_type_cat"/>
+        </record>
+        
+        <record id="pet_breed_parrot" model="pet.breed">
+            <field name="name">Parrot</field>
+            <field name="type_id" ref="pet_type_bird"/>
+        </record>
+        
+        <record id="customer_nguyen_van_a" model="res.partner">
+            <field name="name">Nguyen Van A</field>
+            <field name="phone">0901234567</field>
+            <field name="email">nguyenvana@example.com</field>
+            <field name="street">123 Le Loi Street</field>
+            <field name="city">Ho Chi Minh City</field>
+        </record>
+        
+        <record id="customer_tran_thi_b" model="res.partner">
+            <field name="name">Tran Thi B</field>
+            <field name="phone">0912345678</field>
+            <field name="email">tranthib@example.com</field>
+            <field name="street">456 Nguyen Hue Boulevard</field>
+            <field name="city">Ho Chi Minh City</field>
+        </record>
+        
+        <record id="doctor_le_van_c" model="res.partner">
+            <field name="name">Dr. Le Van C</field>
+            <field name="phone">0923456789</field>
+            <field name="email">drlevanc@pethospital.com</field>
+            <field name="is_company">False</field>
+        </record>
+        
+        <record id="service_general_checkup" model="product.product">
+            <field name="name">General Health Checkup</field>
+            <field name="list_price">200000</field>
+            <field name="type">service</field>
+            <field name="is_pet_service">True</field>
+            <field name="description">Complete physical examination for pets</field>
+        </record>
+        
+        <record id="service_vaccination" model="product.product">
+            <field name="name">Vaccination Service</field>
+            <field name="list_price">150000</field>
+            <field name="type">service</field>
+            <field name="is_pet_service">True</field>
+            <field name="description">Standard vaccination for dogs and cats</field>
+        </record>
+        
+        <record id="service_grooming" model="product.product">
+            <field name="name">Pet Grooming</field>
+            <field name="list_price">300000</field>
+            <field name="type">service</field>
+            <field name="is_pet_service">True</field>
+            <field name="description">Full grooming service including bath, haircut, and nail trimming</field>
+        </record>
+        
+        <record id="pet_max" model="pet.pet">
+            <field name="code">PET001</field>
+            <field name="name">Max</field>
+            <field name="dob" eval="(DateTime.now() - relativedelta(years=3)).strftime('%Y-%m-%d')"/>
+            <field name="owner_id" ref="customer_nguyen_van_a"/>
+            <field name="pet_type_id" ref="pet_type_dog"/>
+            <field name="pet_breed_id" ref="pet_breed_golden_retriever"/>
+            <field name="owner_phone">0901234567</field>
+            <field name="owner_address">123 Le Loi Street, Ho Chi Minh City</field>
+        </record>
+        
+        <record id="pet_bella" model="pet.pet">
+            <field name="code">PET002</field>
+            <field name="name">Bella</field>
+            <field name="dob" eval="(DateTime.now() - relativedelta(years=2)).strftime('%Y-%m-%d')"/>
+            <field name="owner_id" ref="customer_nguyen_van_a"/>
+            <field name="pet_type_id" ref="pet_type_cat"/>
+            <field name="pet_breed_id" ref="pet_breed_persian"/>
+            <field name="owner_phone">0901234567</field>
+            <field name="owner_address">123 Le Loi Street, Ho Chi Minh City</field>
+        </record>
+        
+        <record id="pet_charlie" model="pet.pet">
+            <field name="code">PET003</field>
+            <field name="name">Charlie</field>
+            <field name="dob" eval="(DateTime.now() - relativedelta(years=1)).strftime('%Y-%m-%d')"/>
+            <field name="owner_id" ref="customer_tran_thi_b"/>
+            <field name="pet_type_id" ref="pet_type_dog"/>
+            <field name="pet_breed_id" ref="pet_breed_poodle"/>
+            <field name="owner_phone">0912345678</field>
+            <field name="owner_address">456 Nguyen Hue Boulevard, Ho Chi Minh City</field>
+        </record>
+        
+        <record id="pet_lucy" model="pet.pet">
+            <field name="code">PET004</field>
+            <field name="name">Lucy</field>
+            <field name="dob" eval="(DateTime.now() - relativedelta(years=4)).strftime('%Y-%m-%d')"/>
+            <field name="owner_id" ref="customer_tran_thi_b"/>
+            <field name="pet_type_id" ref="pet_type_cat"/>
+            <field name="pet_breed_id" ref="pet_breed_siamese"/>
+            <field name="owner_phone">0912345678</field>
+            <field name="owner_address">456 Nguyen Hue Boulevard, Ho Chi Minh City</field>
+        </record>
+        
+        <record id="pet_coco" model="pet.pet">
+            <field name="code">PET005</field>
+            <field name="name">Coco</field>
+            <field name="dob" eval="(DateTime.now() - relativedelta(months=6)).strftime('%Y-%m-%d')"/>
+            <field name="owner_id" ref="customer_nguyen_van_a"/>
+            <field name="pet_type_id" ref="pet_type_bird"/>
+            <field name="pet_breed_id" ref="pet_breed_parrot"/>
+            <field name="owner_phone">0901234567</field>
+            <field name="owner_address">123 Le Loi Street, Ho Chi Minh City</field>
+        </record>
+        
+        <record id="booking_001" model="pet.booking">
+            <field name="name">BOOK001</field>
+            <field name="booking_date" eval="DateTime.now().strftime('%Y-%m-%d')"/>
+            <field name="partner_id" ref="customer_nguyen_van_a"/>
+            <field name="pet_id" ref="pet_max"/>
+            <field name="doctor_id" ref="doctor_le_van_c"/>
+            <field name="state">confirmed</field>
+            <field name="notes">Regular checkup for Max</field>
+        </record>
+        
+        <record id="booking_line_001_1" model="pet.booking.line">
+            <field name="booking_id" ref="booking_001"/>
+            <field name="product_id" ref="service_general_checkup"/>
+            <field name="product_uom_qty">1</field>
+            <field name="price_unit">200000</field>
+        </record>
+        
+        <record id="booking_002" model="pet.booking">
+            <field name="name">BOOK002</field>
+            <field name="booking_date" eval="(DateTime.now() + relativedelta(days=1)).strftime('%Y-%m-%d')"/>
+            <field name="partner_id" ref="customer_tran_thi_b"/>
+            <field name="pet_id" ref="pet_charlie"/>
+            <field name="doctor_id" ref="doctor_le_van_c"/>
+            <field name="state">draft</field>
+            <field name="notes">Vaccination and grooming for Charlie</field>
+        </record>
+        
+        <record id="booking_line_002_1" model="pet.booking.line">
+            <field name="booking_id" ref="booking_002"/>
+            <field name="product_id" ref="service_vaccination"/>
+            <field name="product_uom_qty">1</field>
+            <field name="price_unit">150000</field>
+        </record>
+        
+        <record id="booking_line_002_2" model="pet.booking.line">
+            <field name="booking_id" ref="booking_002"/>
+            <field name="product_id" ref="service_grooming"/>
+            <field name="product_uom_qty">1</field>
+            <field name="price_unit">300000</field>
+        </record>
+        
     </data>
 </odoo>

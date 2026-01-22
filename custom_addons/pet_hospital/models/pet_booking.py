@@ -77,7 +77,6 @@ class PetBookingLine(models.Model):
 class PetBooking(models.Model):
     _name = 'pet.booking'
     _description = 'Pet Booking'
-    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'booking_date desc, id desc'
 
     name = fields.Char(
@@ -136,7 +135,6 @@ class PetBooking(models.Model):
         ],
         string="Trạng thái",
         default='draft',
-        tracking=True,
         readonly=True,
     )
     notes = fields.Text(string="Notes")

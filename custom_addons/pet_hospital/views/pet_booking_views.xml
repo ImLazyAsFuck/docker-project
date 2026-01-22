@@ -79,7 +79,6 @@
                         <field name="amount_total" widget="monetary" nolabel="1"/>
                     </group>
                 </sheet>
-                <chatter/>
             </form>
         </field>
     </record>
