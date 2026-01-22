@@ -17,7 +17,6 @@ Pet Hospital Management System
     'depends': [
         'base',
         'product',
-        'mail',
     ],
 
     'data': [
